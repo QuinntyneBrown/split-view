@@ -1,7 +1,5 @@
 :host {    
     display: grid;
-    grid-template-columns: var(--grid-left-column-width,1fr) 3px 1fr;
-    grid-template-rows: 1fr;
     padding: 0;
     margin:0;
     width: 100vw;
@@ -9,6 +7,26 @@
     grid-gap: 0px;
 }
 
+:host(.vertical) { 
+    grid-template-columns: var(--grid-main-panel-width,1fr) 3px 1fr;
+    grid-template-rows: 1fr;    
+}
+
+:host(.horizontal) { 
+    grid-template-rows: var(--grid-main-panel-height,1fr) 3px 1fr;
+    grid-template-columns: 1fr;    
+}
+
 .panel {
     background-color: #ccc;    
+}
+
+:host(.horizontal) ce-sash {
+    cursor: ns-resize;
+    grid-row: 2;
+}
+
+:host(.vertical) ce-sash {
+    cursor: ew-resize;
+    grid-column: 2;
 }
