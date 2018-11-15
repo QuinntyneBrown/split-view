@@ -16,13 +16,6 @@ export class SplitViewComponent extends HTMLElement {
     this.onSashDidChange = this.onSashDidChange.bind(this);
   }
   
-  static get observedAttributes () {
-    return [
-      "main-panel-height",
-      "main-panel-width"
-    ];
-  }
-
   connectedCallback() {   
     this.attachShadow({ mode: 'open' });
 
@@ -106,12 +99,6 @@ export class SplitViewComponent extends HTMLElement {
     this.sashCurrentx = currentx;
 
     this.sashCurrenty = currenty;
-  }
-
-  attributeChangedCallback (name, oldValue, newValue) {
-    switch (name) {
-       
-    }
   }
 }
 
