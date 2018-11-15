@@ -100,7 +100,6 @@ export class SplitViewComponent extends HTMLElement {
       this.mainPanelWidth = this.mainPanelWidth - this.sashCurrentx + currentx;
     
     if(this.layout == SplitViewLayout.horizontal)  {     
-      console.log(this._mainPanelHeight);
       this.mainPanelHeight = this.mainPanelHeight - this.sashCurrenty + currenty;
     }
 
