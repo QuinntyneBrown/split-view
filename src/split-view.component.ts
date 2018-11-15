@@ -16,26 +16,27 @@ export class SplitViewComponent extends HTMLElement {
     this.onSashDidChange = this.onSashDidChange.bind(this);
   }
   
+  static get observedAttributes () {
+    return [
+      "main-panel-height",
+      "main-panel-width"
+    ];
+  }
+
   connectedCallback() {   
     this.attachShadow({ mode: 'open' });
+
     render(this.template, this.shadowRoot);
 
     if (!this.hasAttribute('role'))
       this.setAttribute('role', 'splitview');
-
-    
-      if(this.classList.contains("vertical"))
-        this.style.setProperty("--grid-main-panel-width",`${this.mainPanelWidth}px`);
-      
-      if(this.classList.contains("horizontal"))
-        this.style.setProperty("--grid-main-panel-height",`${this.mainPanelHeight}px`);
   }
 
   sashCurrentx:number;
 
   sashCurrenty:number;
 
-  get layout(): SplitViewLayout { 
+  get layout(): SplitViewLayout {     
     return this.classList.contains("vertical") 
     ? SplitViewLayout.vertical 
     : SplitViewLayout.horizontal; 
@@ -43,9 +44,37 @@ export class SplitViewComponent extends HTMLElement {
 
   get mainPanel():HTMLElement { return <HTMLElement>this.querySelector('[slot=main]'); }
 
-  get mainPanelWidth(): number { return +this.mainPanel.offsetWidth; }
+  private _mainPanelWidth:number;
 
-  get mainPanelHeight():number { return +this.mainPanel.offsetHeight; } 
+  private _mainPanelHeight:number;
+
+  get mainPanelWidth(): number { 
+    if(!this._mainPanelWidth) {
+      const style = getComputedStyle(this);
+      this._mainPanelWidth = +style.getPropertyValue("--grid-main-panel-width").replace('px','');       
+    }
+      
+    return this._mainPanelWidth;   
+  }
+
+  set mainPanelWidth(value:number) { 
+    this.style.setProperty("--grid-main-panel-width",`${this.mainPanelWidth}px`);
+    this._mainPanelWidth = value; 
+  }
+
+  get mainPanelHeight():number { 
+    if(!this._mainPanelHeight) {   
+      const style = getComputedStyle(this); 
+      this._mainPanelHeight = +style.getPropertyValue("--grid-main-panel-height").replace('px','');   
+    }
+
+    return this._mainPanelHeight; 
+  } 
+
+  set mainPanelHeight(value:number) { 
+    this.style.setProperty("--grid-main-panel-height",`${this.mainPanelHeight}px`);
+    this._mainPanelHeight = value; 
+  }
 
   get template(): TemplateResult {
     return html`
@@ -63,23 +92,27 @@ export class SplitViewComponent extends HTMLElement {
   }
 
   onSashDidChange(e:CustomEvent) {
-
+    
     const currentx = +e.detail["currentx"];
     const currenty = +e.detail["currenty"];
-    
-    console.log(`${this.mainPanelWidth - this.sashCurrentx - currentx}px`);
 
-    if(this.layout == SplitViewLayout.vertical) {
-      this.style.setProperty("--grid-main-panel-width",`${this.mainPanelWidth - this.sashCurrentx + currentx}px`);
-    }
+    if(this.layout == SplitViewLayout.vertical)
+      this.mainPanelWidth = this.mainPanelWidth - this.sashCurrentx + currentx;
     
-    if(this.layout == SplitViewLayout.horizontal) {       
-      this.style.setProperty("--grid-main-panel-height",`${this.mainPanelHeight - this.sashCurrenty + currenty}px`);
+    if(this.layout == SplitViewLayout.horizontal)  {     
+      console.log(this._mainPanelHeight);
+      this.mainPanelHeight = this.mainPanelHeight - this.sashCurrenty + currenty;
     }
 
     this.sashCurrentx = currentx;
 
     this.sashCurrenty = currenty;
+  }
+
+  attributeChangedCallback (name, oldValue, newValue) {
+    switch (name) {
+       
+    }
   }
 }
 
