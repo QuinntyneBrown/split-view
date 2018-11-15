@@ -1,0 +1,5 @@
+:host {
+    cursor: ew-resize;
+    grid-column: 2;
+    background-color: red;
+}

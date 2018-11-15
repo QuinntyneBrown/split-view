@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Split View</title>
+
+    <meta charset="utf-8" />
+
+    <base href="/">
+    
+    <meta name="viewport"
+          content="user-scalable=no,
+              initial-scale=1,
+              maximum-scale=1,
+              minimum-scale=1,
+              width=device-width,
+              height=device-height,
+              target-densitydpi=device-dpi" />
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" />
+    
+    <style>
+        html,body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <ce-split-view>        
+            <div slot="right"></div>
+
+            <div slot="left"></div>            
+    </ce-split-view>
+
+    <script src="dist/app.js"></script>
+</body>
+</html>
