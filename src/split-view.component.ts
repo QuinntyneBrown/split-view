@@ -16,6 +16,13 @@ export class SplitViewComponent extends HTMLElement {
     this.onSashDidChange = this.onSashDidChange.bind(this);
   }
   
+  static get observedAttributes() {
+    return [
+      "show-secondary-panel",
+      "show-secondary-panel-horizontal"
+    ];
+  }
+
   connectedCallback() {   
     this.attachShadow({ mode: 'open' });
 
@@ -34,8 +41,6 @@ export class SplitViewComponent extends HTMLElement {
     ? SplitViewLayout.vertical 
     : SplitViewLayout.horizontal; 
   }
-
-  get mainPanel():HTMLElement { return <HTMLElement>this.querySelector('[slot=main]'); }
 
   private _mainPanelWidth:number;
 
@@ -84,22 +89,45 @@ export class SplitViewComponent extends HTMLElement {
     this.sashCurrenty = +e.detail["starty"];
   }
 
-  onSashDidChange(e:CustomEvent) {
-    
+  onSashDidChange(e:CustomEvent) {    
     const currentx = +e.detail["currentx"];
     const currenty = +e.detail["currenty"];
 
     if(this.layout == SplitViewLayout.vertical)
       this.mainPanelWidth = this.mainPanelWidth - this.sashCurrentx + currentx;
     
-    if(this.layout == SplitViewLayout.horizontal)  {     
+    if(this.layout == SplitViewLayout.horizontal)  
       this.mainPanelHeight = this.mainPanelHeight - this.sashCurrenty + currenty;
-    }
-
+    
     this.sashCurrentx = currentx;
 
     this.sashCurrenty = currenty;
   }
+
+  attributeChangedCallback (name, oldValue, newValue) {
+    switch (name) {
+      case "show-secondary-panel":        
+        var value = JSON.parse(newValue);
+
+        if(value && !this.classList.contains("vertical"))
+          this.classList.add("vertical");
+
+        if(!value)
+          this.classList.remove("vertical");          
+        break;
+        
+      case "show-secondary-panel-horizontal":
+        var value = JSON.parse(newValue);
+
+        if(value && !this.classList.contains("horizontal"))
+          this.classList.add("horizontal");
+
+        if(!value)
+          this.classList.remove("horizontal");  
+
+        break;        
+    }
+  }  
 }
 
 customElements.define(`ce-split-view`,SplitViewComponent);

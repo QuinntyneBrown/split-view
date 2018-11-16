@@ -6,8 +6,21 @@
     height: 100%;
     grid-gap: 0px;
     overflow: hidden;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
     --grid-main-panel-width:800px;
     --grid-main-panel-height:500px;
+}
+
+app-sash, [name='secondary'] {
+    display:none;
+}
+
+:host(.vertical) app-sash,
+:host(.vertical) [name='secondary'],
+:host(.horizontal) app-sash,
+:host(.horizontal) [name='secondary'] {
+    display: block;
 }
 
 :host(.vertical) { 
